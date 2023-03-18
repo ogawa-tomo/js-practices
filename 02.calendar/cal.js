@@ -1,8 +1,14 @@
 var argv = require("minimist")(process.argv.slice(2));
 
 const now = new Date();
-const month = argv.m || now.getMonth() + 1; // 月は0起点
-const year = argv.y || now.getFullYear();
+const month = typeof argv.m === "undefined" ? now.getMonth() + 1 : argv.m; // 月は0起点
+const year = typeof argv.y === "undefined" ? now.getFullYear() : argv.y;
+
+if (!Number.isInteger(month) || month < 1 || 12 < month)
+  throw "月には1から12までの数字を指定してください";
+
+if (!Number.isInteger(year) || year < 1970 || 2100 < year)
+  throw "年には1970から2100までの数字を指定してください";
 
 const first_date = new Date(year, month - 1, 1);
 const last_date = new Date(year, month, 0);
