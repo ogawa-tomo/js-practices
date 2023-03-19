@@ -9,5 +9,7 @@ reader.on("line", (line) => {
   lines.push(line);
 });
 reader.on("close", () => {
-  console.log(lines);
+  lines.forEach((line) => {
+    console.log(line);
+  });
 });
