@@ -1,10 +1,19 @@
 const fs = require("fs");
+const path = require("path");
 
 // process.stdin.resume();
 // process.stdin.setEncoding("utf8");
 
 const main = async () => {
   const argv = require("minimist")(process.argv.slice(2));
+  if (argv.l) {
+    const files = fs.readdirSync(".").filter((fd) => {
+      return (
+        fs.statSync(path.join(".", fd)).isFile() && path.extname(fd) === ".txt"
+      );
+    });
+    console.log(files);
+  }
   const lines = await getStdinLines();
   fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
 };
