@@ -1,9 +1,11 @@
+const fs = require("fs");
+
 // process.stdin.resume();
 // process.stdin.setEncoding("utf8");
 
 const main = async () => {
   const lines = await getStdinLines();
-  console.log(lines);
+  fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
 };
 
 const getStdinLines = () => {
