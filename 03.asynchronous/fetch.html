@@ -1,0 +1,10 @@
+<script>
+  const url = "https://bootcamp.fjord.jp/";
+  fetch(url)
+    .then((response) => {
+      return response.text();
+    })
+    .then((data) => {
+      console.log(data);
+    });
+</script>
