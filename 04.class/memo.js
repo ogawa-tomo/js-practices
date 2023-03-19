@@ -4,6 +4,7 @@ const fs = require("fs");
 // process.stdin.setEncoding("utf8");
 
 const main = async () => {
+  const argv = require("minimist")(process.argv.slice(2));
   const lines = await getStdinLines();
   fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
 };
