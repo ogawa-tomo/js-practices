@@ -1,8 +1,8 @@
 <script>
-  async function printHtml(url) {
+  const printHtml = async (url) => {
     let response = await fetch(url);
     let html = await response.text();
     console.log(html);
-  }
+  };
   printHtml("https://bootcamp.fjord.jp/");
 </script>
