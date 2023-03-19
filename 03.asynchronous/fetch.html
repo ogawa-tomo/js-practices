@@ -1,7 +1,7 @@
 <script>
   const printHtml = async (url) => {
-    let response = await fetch(url);
-    let html = await response.text();
+    const response = await fetch(url);
+    const html = await response.text();
     console.log(html);
   };
   printHtml("https://bootcamp.fjord.jp/");
