@@ -12,10 +12,13 @@ const main = async () => {
         fs.statSync(path.join(".", fd)).isFile() && path.extname(fd) === ".txt"
       );
     });
-    console.log(files);
+    files.forEach((file) => {
+      console.log(file.replace(".txt", ""));
+    });
+  } else {
+    const lines = await getStdinLines();
+    fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
   }
-  const lines = await getStdinLines();
-  fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
 };
 
 const getStdinLines = () => {
