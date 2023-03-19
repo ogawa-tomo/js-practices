@@ -1,7 +1,8 @@
 <script>
-  const url = "https://bootcamp.fjord.jp/";
-  fetch(url)
-    .then((response) => response.text())
-    .then((text) => console.log(text))
-    .catch((error) => alert(error.message));
+  async function printHtml(url) {
+    let response = await fetch(url);
+    let html = await response.text();
+    console.log(html);
+  }
+  printHtml("https://bootcamp.fjord.jp/");
 </script>
