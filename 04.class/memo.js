@@ -26,7 +26,7 @@ const main = async () => {
     const memos = getMemos();
     const prompt = new Select({
       name: "memos",
-      message: "Choose a memo you want to see:",
+      message: "Choose a memo you want to delete:",
       choices: memos,
     });
     const memo = await prompt.run();
