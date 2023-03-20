@@ -70,7 +70,7 @@ class Memo {
       );
     });
     const memos = files.map((file) => {
-      const title = file.replace(".txt", "");
+      const title = file.slice(0, -4);
       const content = fs.readFileSync(file, "utf8");
       return new this(title, content);
     });
