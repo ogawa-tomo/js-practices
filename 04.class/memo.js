@@ -13,29 +13,28 @@ const main = async () => {
       console.log(memo.title);
     });
   } else if (argv.r) {
-    const memos = Memo.all();
-    const prompt = new Select({
-      name: "memos",
-      message: "Choose a memo you want to see:",
-      choices: memos.map((memo) => memo.title),
-    });
-    const memo_title = await prompt.run();
-    const memo = Memo.find_by_title(memo_title);
+    const memo = await selectMemoFromPrompt("Choose a memo you want to see:");
     console.log(memo.content);
   } else if (argv.d) {
-    const memos = Memo.all();
-    const prompt = new Select({
-      name: "memos",
-      message: "Choose a memo you want to delete:",
-      choices: memos.map((memo) => memo.title),
-    });
-    const memo_title = await prompt.run();
-    const memo = Memo.find_by_title(memo_title);
+    const memo = await selectMemoFromPrompt(
+      "Choose a memo you want to delete:"
+    );
     memo.destroy();
   } else {
     const lines = await getStdinLines();
     Memo.create(lines[0], lines.join("\n"));
   }
+};
+
+const selectMemoFromPrompt = async (message) => {
+  const memos = Memo.all();
+  const prompt = new Select({
+    name: "memos",
+    message: message,
+    choices: memos.map((memo) => memo.title),
+  });
+  const memo_title = await prompt.run();
+  return Memo.find_by_title(memo_title);
 };
 
 const getStdinLines = () => {
