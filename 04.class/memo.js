@@ -11,12 +11,12 @@ const main = async () => {
     });
   } else if (argv.r) {
     const memo = await selectMemoFromPrompt("Choose a memo you want to see:");
-    console.log(memo.content);
+    if (!(typeof memo === "undefined")) console.log(memo.content);
   } else if (argv.d) {
     const memo = await selectMemoFromPrompt(
       "Choose a memo you want to delete:"
     );
-    memo.destroy();
+    if (!(typeof memo === "undefined")) memo.destroy();
   } else {
     const lines = await getStdinLines();
     Memo.create(lines[0], lines.join("\n"));
@@ -25,6 +25,10 @@ const main = async () => {
 
 const selectMemoFromPrompt = async (message) => {
   const memos = Memo.all();
+  if (memos.length === 0) {
+    console.log("メモがありません。");
+    return;
+  }
   const prompt = new Select({
     name: "memos",
     message: message,
