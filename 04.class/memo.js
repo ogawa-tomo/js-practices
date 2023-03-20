@@ -25,6 +25,20 @@ const main = async () => {
     const memo = await prompt.run();
     const text = fs.readFileSync(`${memo}.txt`, "utf8");
     console.log(text);
+  } else if (argv.d) {
+    const files = getFiles();
+    const memos = files.map((file) => {
+      return file.replace(".txt", "");
+    });
+    const prompt = new Select({
+      name: "memos",
+      message: "Choose a memo you want to see:",
+      choices: memos,
+    });
+    const memo = await prompt.run();
+    fs.unlink(`${memo}.txt`, (err) => {
+      if (err) throw err;
+    });
   } else {
     const lines = await getStdinLines();
     fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
