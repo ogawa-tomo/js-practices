@@ -36,6 +36,7 @@ const main = async () => {
   } else {
     const lines = await getStdinLines();
     fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
+    Memo.create(lines[0], lines.join("\n"));
   }
 };
 
@@ -65,5 +66,11 @@ const getMemos = () => {
   });
   return memos;
 };
+
+class Memo {
+  static create(title, content) {
+    fs.writeFileSync(`${title}.txt`, content);
+  }
+}
 
 main();
