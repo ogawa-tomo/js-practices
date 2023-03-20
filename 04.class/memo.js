@@ -8,15 +8,12 @@ const { Select } = require("enquirer");
 const main = async () => {
   const argv = require("minimist")(process.argv.slice(2));
   if (argv.l) {
-    const files = getFiles();
-    files.forEach((file) => {
-      console.log(file.replace(".txt", ""));
+    const memos = getMemos();
+    memos.forEach((memo) => {
+      console.log(memo);
     });
   } else if (argv.r) {
-    const files = getFiles();
-    const memos = files.map((file) => {
-      return file.replace(".txt", "");
-    });
+    const memos = getMemos();
     const prompt = new Select({
       name: "memos",
       message: "Choose a memo you want to see:",
@@ -26,10 +23,7 @@ const main = async () => {
     const text = fs.readFileSync(`${memo}.txt`, "utf8");
     console.log(text);
   } else if (argv.d) {
-    const files = getFiles();
-    const memos = files.map((file) => {
-      return file.replace(".txt", "");
-    });
+    const memos = getMemos();
     const prompt = new Select({
       name: "memos",
       message: "Choose a memo you want to see:",
@@ -60,13 +54,16 @@ const getStdinLines = () => {
   });
 };
 
-const getFiles = () => {
+const getMemos = () => {
   const files = fs.readdirSync(".").filter((fd) => {
     return (
       fs.statSync(path.join(".", fd)).isFile() && path.extname(fd) === ".txt"
     );
   });
-  return files;
+  const memos = files.map((file) => {
+    return file.replace(".txt", "");
+  });
+  return memos;
 };
 
 main();
