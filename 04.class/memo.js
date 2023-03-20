@@ -23,7 +23,8 @@ const main = async () => {
       choices: memos,
     });
     const memo = await prompt.run();
-    console.log(memo);
+    const text = fs.readFileSync(`${memo}.txt`, "utf8");
+    console.log(text);
   } else {
     const lines = await getStdinLines();
     fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
