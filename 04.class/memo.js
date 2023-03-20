@@ -2,9 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const { Select } = require("enquirer");
 
-// process.stdin.resume();
-// process.stdin.setEncoding("utf8");
-
 const main = async () => {
   const argv = require("minimist")(process.argv.slice(2));
   if (argv.l) {
