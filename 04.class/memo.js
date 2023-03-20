@@ -55,11 +55,17 @@ const getStdinLines = () => {
 
 class Memo {
   constructor(title, content) {
-    this.title = title;
-    this.content = content;
+    this._title = title;
+    this._content = content;
   }
   static create(title, content) {
     fs.writeFileSync(`${title}.txt`, content);
+  }
+  get title() {
+    return this._title;
+  }
+  get content() {
+    return this._content;
   }
   static all() {
     const files = fs.readdirSync(".").filter((fd) => {
