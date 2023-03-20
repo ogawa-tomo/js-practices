@@ -16,7 +16,10 @@ const main = async () => {
     const memo = await selectMemoFromPrompt(
       "Choose a memo you want to delete:"
     );
-    if (!(typeof memo === "undefined")) memo.destroy();
+    if (!(typeof memo === "undefined")) {
+      memo.destroy();
+      console.log(`${memo.title}を削除しました。`);
+    }
   } else {
     const lines = await getStdinLines();
     Memo.create(lines[0], lines.join("\n"));
