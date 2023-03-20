@@ -10,32 +10,30 @@ const main = async () => {
   if (argv.l) {
     const memos = Memo.all();
     memos.forEach((memo) => {
-      console.log(memo);
+      console.log(memo.title);
     });
   } else if (argv.r) {
     const memos = Memo.all();
     const prompt = new Select({
       name: "memos",
       message: "Choose a memo you want to see:",
-      choices: memos,
+      choices: memos.map((memo) => memo.title),
     });
-    const memo = await prompt.run();
-    const text = fs.readFileSync(`${memo}.txt`, "utf8");
-    console.log(text);
+    const memo_title = await prompt.run();
+    const memo = Memo.find_by_title(memo_title);
+    console.log(memo.content);
   } else if (argv.d) {
     const memos = Memo.all();
     const prompt = new Select({
       name: "memos",
       message: "Choose a memo you want to delete:",
-      choices: memos,
+      choices: memos.map((memo) => memo.title),
     });
-    const memo = await prompt.run();
-    fs.unlink(`${memo}.txt`, (err) => {
-      if (err) throw err;
-    });
+    const memo_title = await prompt.run();
+    const memo = Memo.find_by_title(memo_title);
+    memo.destroy();
   } else {
     const lines = await getStdinLines();
-    fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
     Memo.create(lines[0], lines.join("\n"));
   }
 };
@@ -56,6 +54,10 @@ const getStdinLines = () => {
 };
 
 class Memo {
+  constructor(title, content) {
+    this.title = title;
+    this.content = content;
+  }
   static create(title, content) {
     fs.writeFileSync(`${title}.txt`, content);
   }
@@ -66,9 +68,19 @@ class Memo {
       );
     });
     const memos = files.map((file) => {
-      return file.replace(".txt", "");
+      const title = file.replace(".txt", "");
+      const content = fs.readFileSync(file, "utf8");
+      return new this(title, content);
     });
     return memos;
+  }
+  static find_by_title(title) {
+    return new this(title, fs.readFileSync(`${title}.txt`, "utf8"));
+  }
+  destroy() {
+    fs.unlink(`${this.title}.txt`, (err) => {
+      if (err) throw err;
+    });
   }
 }
 
