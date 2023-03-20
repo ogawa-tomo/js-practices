@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { Select } = require("enquirer");
 
 // process.stdin.resume();
 // process.stdin.setEncoding("utf8");
@@ -13,6 +14,16 @@ const main = async () => {
     });
   } else if (argv.r) {
     const files = getFiles();
+    const memos = files.map((file) => {
+      return file.replace(".txt", "");
+    });
+    const prompt = new Select({
+      name: "memos",
+      message: "Choose a memo you want to see:",
+      choices: memos,
+    });
+    const memo = await prompt.run();
+    console.log(memo);
   } else {
     const lines = await getStdinLines();
     fs.writeFileSync(`${lines[0]}.txt`, lines.join("\n"));
