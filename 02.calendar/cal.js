@@ -6,12 +6,13 @@ const now = new Date();
 const month = argv.m ?? now.getMonth() + 1;
 const year = argv.y ?? now.getFullYear();
 
-if (!Number.isInteger(month) || month < 1 || 12 < month)
+if (!Number.isInteger(month) || month < 1 || 12 < month) {
   throw "月には1から12までの数字を指定してください";
+}
 
-if (!Number.isInteger(year) || year < 1970 || 2100 < year)
+if (!Number.isInteger(year) || year < 1970 || 2100 < year) {
   throw "年には1970から2100までの数字を指定してください";
-
+}
 const first_date = new Date(year, month - 1, 1);
 const last_date = new Date(year, month, 0);
 
