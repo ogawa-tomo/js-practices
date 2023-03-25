@@ -1,4 +1,6 @@
-var argv = require("minimist")(process.argv.slice(2));
+import minimist from "minimist";
+
+const argv = minimist(process.argv.slice(2));
 
 const now = new Date();
 const month = typeof argv.m === "undefined" ? now.getMonth() + 1 : argv.m; // 月は0起点
