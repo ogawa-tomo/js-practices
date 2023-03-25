@@ -3,8 +3,8 @@ import minimist from "minimist";
 const argv = minimist(process.argv.slice(2));
 
 const now = new Date();
-const month = typeof argv.m === "undefined" ? now.getMonth() + 1 : argv.m; // 月は0起点
-const year = typeof argv.y === "undefined" ? now.getFullYear() : argv.y;
+const month = argv.m ?? now.getMonth() + 1;
+const year = argv.y ?? now.getFullYear();
 
 if (!Number.isInteger(month) || month < 1 || 12 < month)
   throw "月には1から12までの数字を指定してください";
