@@ -23,7 +23,7 @@ const main = () => {
   console.log("日 月 火 水 木 金 土");
   process.stdout.write("   ".repeat(firstDate.getDay()));
   for (let day = 1; day <= lastDate.getDate(); day++) {
-    let date = new Date(year, month - 1, day);
+    const date = new Date(year, month - 1, day);
     process.stdout.write(String(date.getDate()).padStart(2, " ") + " ");
     if (date.getDay() === 6) console.log("");
   }
