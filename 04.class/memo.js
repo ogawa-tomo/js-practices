@@ -7,7 +7,7 @@ const main = async () => {
   if (argv.l) {
     const memos = Memo.all();
     memos.forEach((memo) => {
-      console.log(memo.title);
+      console.log(memo.first_line);
     });
   } else if (argv.r) {
     const memo = await selectMemoFromPrompt("Choose a memo you want to see:");
@@ -19,7 +19,7 @@ const main = async () => {
     );
     if (typeof memo === "undefined") return;
     memo.destroy();
-    console.log(`${memo.title}を削除しました。`);
+    console.log(`${memo.first_line}を削除しました。`);
   } else {
     const lines = await getStdinLines();
     Memo.create(lines[0], lines.join("\n"));
@@ -35,10 +35,10 @@ const selectMemoFromPrompt = async (message) => {
   const prompt = new Select({
     name: "memos",
     message: message,
-    choices: memos.map((memo) => memo.title),
+    choices: memos.map((memo) => memo.first_line),
   });
-  const memo_title = await prompt.run();
-  return Memo.find_by_title(memo_title);
+  const memo_first_line = await prompt.run();
+  return Memo.find_by_first_line(memo_first_line);
 };
 
 const getStdinLines = () => {
@@ -58,18 +58,21 @@ const getStdinLines = () => {
 
 class Memo {
   static _dir = "memos";
-  constructor(title, content) {
-    this._title = title;
+  constructor(file_name, content) {
+    this._file_name = file_name;
     this._content = content;
   }
   static create(title, content) {
     fs.writeFileSync(path.join(this._dir, `${title}.txt`), content);
   }
-  get title() {
-    return this._title;
+  get file_name() {
+    return this._file_name;
   }
   get content() {
     return this._content;
+  }
+  get first_line() {
+    return this.content.split("\n")[0];
   }
   static all() {
     const files = fs.readdirSync(this._dir).filter((file) => {
@@ -79,22 +82,27 @@ class Memo {
       );
     });
     const memos = files.map((file) => {
-      const title = file.slice(0, -4);
+      const file_name = file.slice(0, -4);
       const content = fs.readFileSync(path.join(this._dir, file), "utf8");
-      return new this(title, content);
+      return new this(file_name, content);
     });
     return memos;
   }
-  static find_by_title(title) {
-    return new this(
-      title,
-      fs.readFileSync(path.join(this._dir, `${title}.txt`), "utf8")
-    );
+  static find_by_first_line(first_line) {
+    const memos = this.all();
+    for (const memo of memos) {
+      if (memo.first_line === first_line) {
+        return memo;
+      }
+    }
   }
   destroy() {
-    fs.unlink(path.join(this.constructor._dir, `${this.title}.txt`), (err) => {
-      if (err) throw err;
-    });
+    fs.unlink(
+      path.join(this.constructor._dir, `${this.file_name}.txt`),
+      (err) => {
+        if (err) throw err;
+      }
+    );
   }
 }
 
