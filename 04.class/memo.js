@@ -22,7 +22,7 @@ const main = async () => {
     console.log(`${memo.first_line}を削除しました。`);
   } else {
     const lines = await getStdinLines();
-    Memo.create(lines[0], lines.join("\n"));
+    Memo.create(lines.join("\n"));
   }
 };
 
@@ -62,8 +62,12 @@ class Memo {
     this._file_name = file_name;
     this._content = content;
   }
-  static create(title, content) {
-    fs.writeFileSync(path.join(this._dir, `${title}.txt`), content);
+  static create(content) {
+    const file_name_nums = this.all().map((memo) => {
+      return parseInt(memo.file_name);
+    });
+    const file_name = (Math.max(...file_name_nums) + 1).toString();
+    fs.writeFileSync(path.join(this._dir, `${file_name}.txt`), content);
   }
   get file_name() {
     return this._file_name;
