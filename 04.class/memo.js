@@ -57,12 +57,13 @@ const getStdinLines = () => {
 };
 
 class Memo {
+  static _dir = "memos";
   constructor(title, content) {
     this._title = title;
     this._content = content;
   }
   static create(title, content) {
-    fs.writeFileSync(`${title}.txt`, content);
+    fs.writeFileSync(path.join(this._dir, `${title}.txt`), content);
   }
   get title() {
     return this._title;
@@ -71,23 +72,27 @@ class Memo {
     return this._content;
   }
   static all() {
-    const files = fs.readdirSync(".").filter((fd) => {
+    const files = fs.readdirSync(this._dir).filter((file) => {
       return (
-        fs.statSync(path.join(".", fd)).isFile() && path.extname(fd) === ".txt"
+        fs.statSync(path.join(this._dir, file)).isFile() &&
+        path.extname(file) === ".txt"
       );
     });
     const memos = files.map((file) => {
       const title = file.slice(0, -4);
-      const content = fs.readFileSync(file, "utf8");
+      const content = fs.readFileSync(path.join(this._dir, file), "utf8");
       return new this(title, content);
     });
     return memos;
   }
   static find_by_title(title) {
-    return new this(title, fs.readFileSync(`${title}.txt`, "utf8"));
+    return new this(
+      title,
+      fs.readFileSync(path.join(this._dir, `${title}.txt`), "utf8")
+    );
   }
   destroy() {
-    fs.unlink(`${this.title}.txt`, (err) => {
+    fs.unlink(path.join(this.constructor._dir, `${this.title}.txt`), (err) => {
       if (err) throw err;
     });
   }
