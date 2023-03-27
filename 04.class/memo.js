@@ -57,7 +57,7 @@ const getStdinLines = () => {
 };
 
 class Memo {
-  static _dir = "memos";
+  static #dir = "memos";
   #file_name;
   #content;
   constructor(file_name, content) {
@@ -72,7 +72,7 @@ class Memo {
       file_name_nums.length > 0
         ? (Math.max(...file_name_nums) + 1).toString()
         : "1";
-    fs.writeFileSync(path.join(this._dir, `${file_name}.txt`), content);
+    fs.writeFileSync(path.join(this.#dir, `${file_name}.txt`), content);
   }
   get file_name() {
     return this.#file_name;
@@ -84,15 +84,15 @@ class Memo {
     return this.content.split("\n")[0];
   }
   static all() {
-    const files = fs.readdirSync(this._dir).filter((file) => {
+    const files = fs.readdirSync(this.#dir).filter((file) => {
       return (
-        fs.statSync(path.join(this._dir, file)).isFile() &&
+        fs.statSync(path.join(this.#dir, file)).isFile() &&
         path.extname(file) === ".txt"
       );
     });
     const memos = files.map((file) => {
       const file_name = file.slice(0, -4);
-      const content = fs.readFileSync(path.join(this._dir, file), "utf8");
+      const content = fs.readFileSync(path.join(this.#dir, file), "utf8");
       return new this(file_name, content);
     });
     return memos;
@@ -107,7 +107,7 @@ class Memo {
   }
   destroy() {
     fs.unlink(
-      path.join(this.constructor._dir, `${this.file_name}.txt`),
+      path.join(this.constructor.#dir, `${this.file_name}.txt`),
       (err) => {
         if (err) throw err;
       }
