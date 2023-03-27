@@ -58,9 +58,11 @@ const getStdinLines = () => {
 
 class Memo {
   static _dir = "memos";
+  #file_name;
+  #content;
   constructor(file_name, content) {
-    this._file_name = file_name;
-    this._content = content;
+    this.#file_name = file_name;
+    this.#content = content;
   }
   static create(content) {
     const file_name_nums = this.all().map((memo) => {
@@ -73,10 +75,10 @@ class Memo {
     fs.writeFileSync(path.join(this._dir, `${file_name}.txt`), content);
   }
   get file_name() {
-    return this._file_name;
+    return this.#file_name;
   }
   get content() {
-    return this._content;
+    return this.#content;
   }
   get first_line() {
     return this.content.split("\n")[0];
