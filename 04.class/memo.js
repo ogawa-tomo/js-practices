@@ -66,7 +66,10 @@ class Memo {
     const file_name_nums = this.all().map((memo) => {
       return parseInt(memo.file_name);
     });
-    const file_name = (Math.max(...file_name_nums) + 1).toString();
+    const file_name =
+      file_name_nums.length > 0
+        ? (Math.max(...file_name_nums) + 1).toString()
+        : "1";
     fs.writeFileSync(path.join(this._dir, `${file_name}.txt`), content);
   }
   get file_name() {
